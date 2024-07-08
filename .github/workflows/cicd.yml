@@ -1,0 +1,30 @@
+name: Deploy Node Application
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}       
+      - name: Build docker image
+        run: docker build -t duymt3/fe-cicd-docker-ec2 .  
+      - name: Publish image to docker hub
+        run: docker push duymt3/fe-cicd-docker-ec2:latest
+        
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull duymt3/fe-cicd-docker-ec2:latest
+      - name: Delete old container
+        run: docker rm -f fe-cicd-docker-ec2-container
+      - name: Run docker container
+        run: docker run -d -p 4200:4200 --name be-cicd-docker-ec2-container duymt3/be-cicd-docker-ec2
