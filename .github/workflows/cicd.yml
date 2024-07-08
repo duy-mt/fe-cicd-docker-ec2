@@ -1,4 +1,4 @@
-name: Deploy Node Application
+name: Deploy Vue Application
 
 on:
   push: 
@@ -27,4 +27,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f fe-cicd-docker-ec2-container
       - name: Run docker container
-        run: docker run -d -p 4200:4200 --name be-cicd-docker-ec2-container duymt3/be-cicd-docker-ec2
+        run: docker run -d -p 4200:4200 --name fe-cicd-docker-ec2-container duymt3/fe-cicd-docker-ec2
