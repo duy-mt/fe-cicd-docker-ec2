@@ -2,7 +2,7 @@
 FROM node:16 as build-stage 
 WORKDIR /app
 COPY package*.json ./
-RUN npm run start
+RUN npm install
 COPY . .
 RUN npm run build
 
